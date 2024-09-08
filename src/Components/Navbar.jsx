@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/Logo.svg";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -8,6 +8,7 @@ import { NavbarLinks } from "../data/navbar-link";
 import apiconnector from "../services/apiconnector";
 import {catagories} from "../services/apis"
 import { MdOutlineArrowDropDownCircle } from "react-icons/md";
+import { useLocation } from "react-router-dom";
 
 const Navbar = (props) => {
   const [Sublink, setSublink] = React.useState([]);
@@ -23,12 +24,14 @@ const Navbar = (props) => {
     };
   
     fetchSublink();
-  }, []);
+  },[]);
+
+  
   
   const isLoggedIn = props.isLoggedIn;
   const setIsLoggedIn = props.setIsLoggedIn;
   return (
-    <div className="flex justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto">
+    <div className="flex justify-between bg-richblack-900 items-center w-11/12 max-w-[1160px] py-4 mx-auto">
       <Link to="/">
         <img src={logo} height={32} width={160} alt="load..." loading="lazy" />
       </Link>
@@ -50,7 +53,7 @@ const Navbar = (props) => {
                   {
                       Sublink.length ? (
                        Sublink.map((sublink, index) => (
-                        <Link key={index} to={sublink.name}><button className=" rounded mb-2">{sublink.name}</button></Link>
+                        <Link key={index} to={"/Catalog/" +sublink.name}><button className=" rounded mb-2">{sublink.name}</button></Link>
                       
                        ))
                       ) : (<div></div>)
@@ -71,32 +74,32 @@ const Navbar = (props) => {
     <Searchbar></Searchbar>
       <div className="flex items-center gap-x-4 text-richblack-100">
        
-        {!isLoggedIn && (
+        {isLoggedIn && (
           <Link to="/login">
             <button className="bg-richblack-800 py-[8px] px-[12px] rounded-[8px] border border-richblack-700">
               Login
             </button>
           </Link>
         )}
-        {!isLoggedIn && (
+        {isLoggedIn && (
           <Link to="/signup">
             <button className="bg-richblack-800 py-[8px] px-[12px] rounded-[8px] border border-richblack-700">
               Sign Up
             </button>
           </Link>
         )}
-         {isLoggedIn && (
+         {!isLoggedIn && (
           <Link to="/Cart">
             <button className=" py-[8px] px-[12px]">
               <FaShoppingCart size={24}></FaShoppingCart>
             </button>
           </Link>
         )}
-        {isLoggedIn && (
+        {!isLoggedIn && (
           <Link to="/">
             <button
               onClick={() => {
-                setIsLoggedIn(false);
+                setIsLoggedIn(true);
                 toast.success("Logout Sucessfully");
               }}
               className="bg-richblack-800 py-[8px] px-[12px] rounded-[8px] border border-richblack-700"
@@ -105,7 +108,7 @@ const Navbar = (props) => {
             </button>
           </Link>
         )}
-        {isLoggedIn && (
+        {!isLoggedIn && (
           <Link to="/dashboard">
             <button className="bg-richblack-800 py-[8px] px-[12px] rounded-[8px] border border-richblack-700">
               Dashboard

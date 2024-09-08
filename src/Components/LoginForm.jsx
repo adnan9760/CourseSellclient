@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Login } from "../services/operation/authapi";
+import { LoginHandler } from "../services/operation/authapi";
 
 const LoginForm = ({ setIsLoggedIn }) => {
     const dispatch = useDispatch();
@@ -21,24 +21,15 @@ const LoginForm = ({ setIsLoggedIn }) => {
         }));
     };
 
-    const submitHandler = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await Login(formData);
-            console.log(response);
-            if (response.status === 200) {
-                setIsLoggedIn(true);
-                toast.success("Login Successful");
-                navigate("/dashboard");
-            } else {
-                toast.error("Invalid Credentials");
-            }
-        } catch (error) {
-            toast.error("Something went wrong. Please try again.");
-            console.error(error);
-        }
-    };
+    const submitHandler = async(e)=>{
+          e.preventDefault();
+          try {
+            const response = await dispatch(LoginHandler(formData,navigate));
 
+                    } catch (error) {
+                        console.log(error);
+                        }
+                        };
     return (
         <form onSubmit={submitHandler} className="flex flex-col w-full gap-y-4 mt-6">
             <label className="w-full">
@@ -84,7 +75,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
                 </Link>
             </label>
 
-            <button type="submit" className="bg-yellow-50 py-[8px] px-[12px] rounded-[8px] mt-6 font-medium text-richblack-900">
+            <button onClick={submitHandler}  className="bg-yellow-50 py-[8px] px-[12px] rounded-[8px] mt-6 font-medium text-richblack-900">
                 Sign in
             </button>
         </form>
