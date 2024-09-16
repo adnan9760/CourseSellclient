@@ -249,19 +249,21 @@ export function EditSection({ editedName, sectionid }) {
 }
 export function CreateSubSection({ title, description, video, sectionid }) {
   console.log("Section ID:", sectionid);
-  console.log("Video Data:", video); // Debugging line
+  console.log("Video Data:", video); 
+  console.log("Desc",description);
+
 
   return async (dispatch) => {
     try {
-      const formdatatosend = new FormData();
+      let formdatatosend = new FormData();
       formdatatosend.append("title", title);
-      formdatatosend.append("discription", description);
+      formdatatosend.append("description", description);
       formdatatosend.append("sectionId", sectionid);
       formdatatosend.append("timeduration", 60);
 
       if (typeof video === "string") {
         const blob = dataURItoBlobvideo(video);
-        formdatatosend.append("videofile", blob, "video.mp4");
+        formdatatosend.append("VideoUrl", blob, "video.mp4");
       } else {
         console.error("Video is not a valid data URI string:", video);
       }
@@ -276,7 +278,13 @@ export function CreateSubSection({ title, description, video, sectionid }) {
         }
       );
 
-      console.log(response);
+     if(response.status === 200){
+      toast.success("SubSection Created");
+     }
+     else{
+      toast.error("Error Creating SubSection");
+     }
+     return response.data;
     } catch (error) {
       console.error("Error creating subsection in course builder:", error);
     }

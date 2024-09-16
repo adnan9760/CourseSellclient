@@ -12,23 +12,23 @@ export default function CourseBuilder() {
   const courseId = queryParams.get('courseid');
   const name = queryParams.get('courseName');
 
-  // State for sections
+ 
   const [sections, setSections] = useState([]);
 
-  // Form data for section creation
+
   const [formData, setFormData] = useState({
     section: "",
   });
 
   function handleSubmit(event) {
-    event.preventDefault(); // Prevent default form submission
-    onclickhandler(); // Handle form submission here
+    event.preventDefault();
+    onclickhandler(); 
   }
 
   function changeHandler(event) {
     setFormData((prev) => ({
       ...prev,
-      [event.target.name]: event.target.value, // Remove array wrapping around value
+      [event.target.name]: event.target.value, 
     }));
   }
 
@@ -37,14 +37,13 @@ export default function CourseBuilder() {
 
     const data = {
       ...formData,
-      courseid: courseId, // Append courseId to form data
+      courseid: courseId, 
     };
 
     dispatch(CreateBuilder(data))
       .then((response) => {
         const sectionDetails = response.data.data;
         
-        // Assuming you're adding the new section to the current list
         setSections((prevSections) => [...prevSections, sectionDetails]);
         console.log("Section Created Successfully:", sectionDetails);
       })
@@ -73,7 +72,7 @@ export default function CourseBuilder() {
           />
         </label>
         <button
-          type="submit" // Submit form on button click
+          type="submit" 
           className="border-solid border-2 border-yellow-500 text-yellow-500 text-[17px] items-center gap-x-2 flex text-white px-4 py-3 rounded-lg mt-4"
         >
           Create Section <IoIosAddCircleOutline size={20} />

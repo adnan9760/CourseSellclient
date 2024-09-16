@@ -81,7 +81,6 @@ export default function SubLecture({ sectionName, sectionid }) {
       </div>
       {
         isAddLectureopen && <AddLecture sectionid = {sectionid} state={isAddLectureopen} setstate={setisAddLectureopen}></AddLecture>
-        
       }
       
     </div>

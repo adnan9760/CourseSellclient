@@ -21,10 +21,8 @@ export default function CourseInformation() {
   };
   const navigate = useNavigate();
   const { editcourse } = useSelector((state) => state.course);
-
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(initialFormData);
-
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [reqValue, setReqValue] = useState("");
@@ -111,13 +109,7 @@ export default function CourseInformation() {
     if(!isFormUpdated){
       alert("Please fill all the fields");
       return;
-    }
-    
-
-
-
-
-    
+    }  
   }
   const handleRemoveImage = () => {
     setPreviewImage("");

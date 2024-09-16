@@ -9,8 +9,8 @@ export default function AddLecture({state,setstate,sectionid}) {
     const dispatch = useDispatch();
     const initialFormData = {
         title: "",
-        description: "", // Fix typo here
-        video: "" // Use 'video' for video files
+        description: "",
+        video: "" 
     };
    
 
@@ -25,10 +25,12 @@ export default function AddLecture({state,setstate,sectionid}) {
           };
           try {
             const responce = await dispatch(CreateSubSection(lectureData))
+            if(responce.status === true){
+                setstate(!state)
+            }
           } catch (error) {
             
           }
-        console.log("Form submitted", formData);
     }
 
     function handleDrop(event) {
@@ -72,7 +74,7 @@ export default function AddLecture({state,setstate,sectionid}) {
 
     }
     return (
-        <div className=' inset-0 bg-black bg-opacity-50  flex items-center w-[100%] justify-center z-50'>
+        <div className=' fixed inset-0 bg-black bg-opacity-50  flex items-center w-[100%] justify-center z-50'>
         
             <form className='w-[700px] bg-richblack-700 p-7' onSubmit={handleSubmit}>
             <div className='justify-between flex mb-3 text-white'>
