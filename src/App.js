@@ -4,7 +4,7 @@ import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import Dashboard from "./Components/DashBoard/Dashboard";
 import PrivateRoute from "./Components/PrivateRoute";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -21,11 +21,37 @@ import { useSelector } from "react-redux";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.profile);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setIsLoggedIn(!!user); 
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      navigate("/login");
+    } else {
+      // Optional: Validate the token with an endpoint if needed
+      // Example:
+      // fetch('/validate-token', {
+      //   headers: { Authorization: `Bearer ${token}` }
+      // })
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     if (!data.valid) navigate("/login");
+      //     else setLoading(false);
+      //   });
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    setIsLoggedIn(!!user);
   }, [user]);
+
+  if (loading) {
+    return <div>Loading...</div>; // Placeholder, replace with your spinner or loader component
+  }
 
   return (
     <div className="bg-richblack-900 flex flex-col">
@@ -40,7 +66,6 @@ function App() {
         <Route path="/verifyotp" element={<VerifyOTP />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
 
-        {/* Private Routes */}
         <Route
           path="/dashboard/*"
           element={
@@ -51,10 +76,7 @@ function App() {
         >
           <Route path="my-profile" element={<MyProfile />} />
           {user?.accountType === "student" && (
-            <>
-
-              <Route path="enrolled-courses" element={<EnrolledCourses />} />
-            </>
+            <Route path="enrolled-courses" element={<EnrolledCourses />} />
           )}
           {user?.accountType === "instructor" && (
             <Route path="add-course" element={<AddCourse />} />
@@ -62,8 +84,6 @@ function App() {
           <Route path="edit" element={<Edit />} />
           <Route path="cart" element={<Cart />} />
         </Route>
-
-        {/* Catch-all route */}
         <Route path="*" element={<Home />} />
       </Routes>
     </div>

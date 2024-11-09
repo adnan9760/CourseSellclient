@@ -3,6 +3,8 @@ import { BsCloudUpload } from "react-icons/bs"; // Import BsCloudUpload for the 
 import { RxCross2 } from "react-icons/rx";
 import { CreateSubSection } from '../../../../services/operation/authapi';
 import { useDispatch } from 'react-redux';
+import ClipLoader from 'react-spinners/ClipLoader';
+import SubLecture from './SubLecture';
 
 export default function AddLecture({state,setstate,sectionid}) {
     console.log("id",sectionid);
@@ -16,8 +18,10 @@ export default function AddLecture({state,setstate,sectionid}) {
 
     const [previewVideo, setPreviewVideo] = useState("");
     const [formData, setFormData] = useState(initialFormData);
+    const [loading, setLoading] = useState(false);
 
      async function handleSubmit(event) {
+        setLoading(true);
         event.preventDefault();
           const lectureData = {
             ...formData,
@@ -25,6 +29,7 @@ export default function AddLecture({state,setstate,sectionid}) {
           };
           try {
             const responce = await dispatch(CreateSubSection(lectureData))
+            setLoading(false);
             if(responce.status === true){
                 setstate(!state)
             }
@@ -75,7 +80,6 @@ export default function AddLecture({state,setstate,sectionid}) {
     }
     return (
         <div className=' fixed inset-0 bg-black bg-opacity-50  flex items-center w-[100%] justify-center z-50'>
-        
             <form className='w-[700px] bg-richblack-700 p-7' onSubmit={handleSubmit}>
             <div className='justify-between flex mb-3 text-white'>
             <p className='text-[22px]'>Adding Lecture</p>
@@ -159,11 +163,14 @@ export default function AddLecture({state,setstate,sectionid}) {
                <div>
 
                <button 
+                 disabled={loading}
                     type="submit"
                     className="bg-yellow-500  text-white rounded px-5  p-2 mt-3"
                 >
-                    Save
+                    {loading ? 'Uploading...' : 'Save'}
+                    <ClipLoader color="#09f" loading={loading} size={20} />
                 </button>
+                
                </div>
 
             </form>

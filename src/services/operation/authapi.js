@@ -277,7 +277,7 @@ export function CreateSubSection({ title, description, video, sectionid }) {
           Auth: `Bearer ${localStorage.getItem("token")}`,
         }
       );
-
+         
      if(response.status === 200){
       toast.success("SubSection Created");
      }

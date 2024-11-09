@@ -13,6 +13,7 @@ export default function SubLecture({ sectionName, sectionid }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(sectionName);
   const[isAddLectureopen,setisAddLectureopen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
  function handleDeleteClick(){
     
