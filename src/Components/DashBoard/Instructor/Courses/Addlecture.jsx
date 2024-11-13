@@ -6,8 +6,8 @@ import { useDispatch } from 'react-redux';
 import ClipLoader from 'react-spinners/ClipLoader';
 import SubLecture from './SubLecture';
 
-export default function AddLecture({state,setstate,sectionid}) {
-    console.log("id",sectionid);
+export default function AddLecture({state,setstate,sectionid,currentCallState, onCallToggle}) {
+    const [call, setcall] = useState(currentCallState);
     const dispatch = useDispatch();
     const initialFormData = {
         title: "",
@@ -19,7 +19,8 @@ export default function AddLecture({state,setstate,sectionid}) {
     const [previewVideo, setPreviewVideo] = useState("");
     const [formData, setFormData] = useState(initialFormData);
     const [loading, setLoading] = useState(false);
-
+    
+    
      async function handleSubmit(event) {
         setLoading(true);
         event.preventDefault();
@@ -27,9 +28,16 @@ export default function AddLecture({state,setstate,sectionid}) {
             ...formData,
             sectionid:sectionid
           };
+          
+       
           try {
             const responce = await dispatch(CreateSubSection(lectureData))
             setLoading(false);
+            
+        const newCallState = !call;  // Toggle the state
+        setcall(newCallState);  // Update the local state in the child
+        onCallToggle(newCallState);  // Pass the updated state to the parent
+      
             if(responce.status === true){
                 setstate(!state)
             }

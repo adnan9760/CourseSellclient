@@ -35,10 +35,12 @@ export default function CourseBuilder() {
   async function onclickhandler() {
     console.log("Inside onclick");
 
+
     const data = {
       ...formData,
       courseid: courseId, 
     };
+    console.log("data",data);
 
     dispatch(CreateBuilder(data))
       .then((response) => {

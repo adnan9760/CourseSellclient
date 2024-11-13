@@ -301,3 +301,24 @@ function dataURItoBlobvideo(dataURI) {
   return new Blob([ab], { type: "video/mp4" });
 }
 
+//FETCH SUBSECTION
+export function fetchSubsection(sectionId) {
+  return async (dispatch) => {
+    try {
+      const fetchdata = await apiconnector(
+        "GET",
+         `${catagories.CREATE_COURSE_SUBSECTION_FETCH}?sectionId=${sectionId}`,
+      null,
+        {
+          "Content-Type": "multipart/form-data",
+          Auth: `Bearer ${localStorage.getItem("token")}`,
+        }
+      );
+      dispatch({ type: 'FETCH_SUBSECTION_SUCCESS', payload: fetchdata });
+      return fetchdata.data;
+    } catch (error) {
+      console.error("Error fetching subsection in course builder:", error);
+      dispatch({ type: 'FETCH_SUBSECTION_FAILURE', error: error.message });
+    }
+  };
+}

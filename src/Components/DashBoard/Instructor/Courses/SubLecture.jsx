@@ -8,13 +8,34 @@ import { GoPlus } from "react-icons/go";
 import { EditSection } from "../../../../services/operation/authapi";
 import { useDispatch } from "react-redux";
 import AddLecture from "./Addlecture";
+import LectureIcon from "./LectureIcon";
+import { fetchSubsection } from "../../../../services/operation/authapi";
 
 export default function SubLecture({ sectionName, sectionid }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(sectionName);
   const[isAddLectureopen,setisAddLectureopen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const[ subsection, setsubsection] = useState([]);
+  const[call,setcall] = useState(false);
   const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await dispatch(fetchSubsection(sectionid));
+              console.log("data",data.data.subSection);
+        setsubsection(data.data.subSection);
+      } catch (error) {
+        console.error("Error fetching subsection:", error);
+      }
+    };
+    fetchData();
+  }, [call]); 
+  const handleCallToggle = (newCallState) => {
+    setcall(newCallState);  
+  };
+  
+
  function handleDeleteClick(){
     
  }
@@ -43,6 +64,8 @@ export default function SubLecture({ sectionName, sectionid }) {
     console.log("press",isAddLectureopen)
   },[isAddLectureopen])
   return (
+    <div>
+     
     <div className="m-4">
       <div className="flex justify-between">
         <div className="flex items-center gap-x-3">
@@ -75,15 +98,28 @@ export default function SubLecture({ sectionName, sectionid }) {
           <TiArrowSortedDown size={20} />
         </div>
       </div>
+      {
+        subsection.length === 0 
+        ? (<div></div>) 
+        : (
+          subsection.map((subsec,id)=>{
+            return(
+              <LectureIcon title={subsec.title} ></LectureIcon>
+            )
+          })
+        )
+      }
       <div className="h-[1px] bg-white mt-1"></div>
       <div className="ml-7 mt-3 space-x-1 text-yellow-500 flex items-center">
         <GoPlus size={20} />
-        <button onClick={handleraddlecture} className="text-[18px] bold">Add Lecture</button>
+        <button onClick={handleraddlecture}  className="text-[18px] bold">Add Lecture</button>
       </div>
+     
       {
-        isAddLectureopen && <AddLecture sectionid = {sectionid} state={isAddLectureopen} setstate={setisAddLectureopen}></AddLecture>
+        isAddLectureopen && <AddLecture currentCallState={call} onCallToggle={handleCallToggle} sectionid = {sectionid} state={isAddLectureopen} setstate={setisAddLectureopen}></AddLecture>
       }
       
+    </div>
     </div>
   );
 }

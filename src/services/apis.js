@@ -11,6 +11,11 @@ export const catagories = {
   CREATE_COURSE_API: BASE_URL + "/course/Createcourse",
   CREATE_COURSE_BUILDER:BASE_URL + "/course/createSection",
   CREATE_COURSE_UPDATE_SECTION:BASE_URL + "/course/updateCourse",
-  CREATE_COURSE_SUBSECTION:BASE_URL + "/course/createSubsection"
+  CREATE_COURSE_SUBSECTION:BASE_URL + "/course/createSubsection",
+  CREATE_COURSE_SUBSECTION_UPDATE:BASE_URL + "/course/updateSubsection",
+  CREATE_COURSE_SUBSECTION_DELETE:BASE_URL + "/course/deleteSubsection",
+  CREATE_COURSE_SUBSECTION_FETCH:BASE_URL + "/course/fetchSubsection",
+  
+
 
 };

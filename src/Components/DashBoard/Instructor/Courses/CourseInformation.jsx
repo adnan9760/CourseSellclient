@@ -129,6 +129,7 @@ export default function CourseInformation() {
 const coursedata = {
     ...formData
 };
+console.log("Coursedata",coursedata);
     try {
       const data =  await dispatch(CreateCourse(coursedata));
       navigate("/dashboard/add-course?courseid="+data.data.data._id +"&courseName=" + data.data.data.title)
