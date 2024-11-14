@@ -5,19 +5,19 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { GoPlus } from "react-icons/go";
-import { EditSection } from "../../../../services/operation/authapi";
+import { DeleteSection, EditSection } from "../../../../services/operation/authapi";
 import { useDispatch } from "react-redux";
 import AddLecture from "./Addlecture";
 import LectureIcon from "./LectureIcon";
 import { fetchSubsection } from "../../../../services/operation/authapi";
-
-export default function SubLecture({ sectionName, sectionid }) {
+export default function SubLecture({ sectionName, sectionid ,currentCallState, onCallToggle  }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(sectionName);
   const[isAddLectureopen,setisAddLectureopen] = useState(false);
   const [loading, setLoading] = useState(false);
   const[ subsection, setsubsection] = useState([]);
   const[call,setcall] = useState(false);
+  const [fetchcall, setfetchCall] = useState(currentCallState);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
@@ -32,12 +32,19 @@ export default function SubLecture({ sectionName, sectionid }) {
     fetchData();
   }, [call]); 
   const handleCallToggle = (newCallState) => {
+
     setcall(newCallState);  
   };
   
 
  function handleDeleteClick(){
-    
+       const responce = dispatch(DeleteSection(sectionid));
+       const newCallState = !fetchcall;
+       console.log("jdkssdddkdsksjdjk",newCallState); // Toggle the state
+       setfetchCall(newCallState);  // Update the local state in the child
+       onCallToggle(newCallState); 
+
+  
  }
 
   function handleEditClick() {
@@ -94,7 +101,7 @@ export default function SubLecture({ sectionName, sectionid }) {
             className="cursor-pointer"
           />
           <RiDeleteBin5Line size={20}
-          onClick={handleDeleteClick} />
+          onClick={handleDeleteClick} className="cursor-pointer" />
           <TiArrowSortedDown size={20} />
         </div>
       </div>

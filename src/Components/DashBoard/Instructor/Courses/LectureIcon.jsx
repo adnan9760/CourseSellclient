@@ -21,7 +21,7 @@ function LectureIcon({title}) {
         }
       }
     function handleDeleteClick(){
-    
+        
     }
     // function handleNameChange(event) {
     //     setEditedName(event.target.value);

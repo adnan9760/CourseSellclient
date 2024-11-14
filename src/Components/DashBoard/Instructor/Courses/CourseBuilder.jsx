@@ -1,20 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useLocation } from 'react-router-dom';
-import { CreateBuilder } from '../../../../services/operation/authapi';
+import { CreateBuilder, Fetchsection } from '../../../../services/operation/authapi';
 import { useDispatch } from 'react-redux';
 import LeatureAdd from './LeatureAdd';
 
 export default function CourseBuilder() {
   const dispatch = useDispatch();
-  const location = useLocation();
+  const location = useLocation(); 
   const queryParams = new URLSearchParams(location.search);
   const courseId = queryParams.get('courseid');
   const name = queryParams.get('courseName');
 
- 
   const [sections, setSections] = useState([]);
+  const [call, setCall] = useState(false); 
 
+  useEffect(() => {
+    // Fetch data inside the useEffect, not in another function
+    const fetchData = async () => {
+      try {
+        const data = await dispatch(Fetchsection(courseId)); // Assuming Fetchsection is an action creator
+        console.log("data section", data);
+        setSections(data.data.coursecontent)
+      } catch (error) {
+        console.error("Error fetching section:", error);
+      }
+    };
+  
+    fetchData();
+  }, [call, dispatch]); // Dependencies to re-run the effect when 'call' or 'dispatch' changes
+
+  const handleCallToggle = (newCallState) => {
+    console.log("presssss", newCallState);
+    setCall(newCallState);  
+  };
 
   const [formData, setFormData] = useState({
     section: "",
@@ -35,17 +54,15 @@ export default function CourseBuilder() {
   async function onclickhandler() {
     console.log("Inside onclick");
 
-
     const data = {
       ...formData,
       courseid: courseId, 
     };
-    console.log("data",data);
+    console.log("data", data);
 
     dispatch(CreateBuilder(data))
       .then((response) => {
         const sectionDetails = response.data.data;
-        
         setSections((prevSections) => [...prevSections, sectionDetails]);
         console.log("Section Created Successfully:", sectionDetails);
       })
@@ -81,12 +98,17 @@ export default function CourseBuilder() {
         </button>
       </form>
 
-
       {sections.length === 0 ? (
         ""
       ) : (
         sections.map((sec, index) => (
-          <LeatureAdd key={index} sectionName={sec.sectionName} sectionid={sec._id} />
+          <LeatureAdd 
+            key={index} 
+            currentCallState={call} 
+            onCallToggle={handleCallToggle}  
+            sectionName={sec.sectionName} 
+            sectionid={sec._id} 
+          />
         ))
       )}
     </div>

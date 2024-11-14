@@ -1,6 +1,7 @@
 import React from "react";
 import apiconnector from "../apiconnector";
 import { catagories } from "../apis";
+import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Form, useNavigate } from "react-router-dom";
 import { setToken } from "../../reducer/slices/authSlice";
@@ -249,9 +250,8 @@ export function EditSection({ editedName, sectionid }) {
 }
 export function CreateSubSection({ title, description, video, sectionid }) {
   console.log("Section ID:", sectionid);
-  console.log("Video Data:", video); 
-  console.log("Desc",description);
-
+  console.log("Video Data:", video);
+  console.log("Desc", description);
 
   return async (dispatch) => {
     try {
@@ -277,14 +277,13 @@ export function CreateSubSection({ title, description, video, sectionid }) {
           Auth: `Bearer ${localStorage.getItem("token")}`,
         }
       );
-         
-     if(response.status === 200){
-      toast.success("SubSection Created");
-     }
-     else{
-      toast.error("Error Creating SubSection");
-     }
-     return response.data;
+
+      if (response.status === 200) {
+        toast.success("SubSection Created");
+      } else {
+        toast.error("Error Creating SubSection");
+      }
+      return response.data;
     } catch (error) {
       console.error("Error creating subsection in course builder:", error);
     }
@@ -307,18 +306,59 @@ export function fetchSubsection(sectionId) {
     try {
       const fetchdata = await apiconnector(
         "GET",
-         `${catagories.CREATE_COURSE_SUBSECTION_FETCH}?sectionId=${sectionId}`,
-      null,
+        `${catagories.CREATE_COURSE_SUBSECTION_FETCH}?sectionId=${sectionId}`,
+        null,
         {
           "Content-Type": "multipart/form-data",
           Auth: `Bearer ${localStorage.getItem("token")}`,
         }
       );
-      dispatch({ type: 'FETCH_SUBSECTION_SUCCESS', payload: fetchdata });
+      dispatch({ type: "FETCH_SUBSECTION_SUCCESS", payload: fetchdata });
       return fetchdata.data;
     } catch (error) {
       console.error("Error fetching subsection in course builder:", error);
-      dispatch({ type: 'FETCH_SUBSECTION_FAILURE', error: error.message });
+      dispatch({ type: "FETCH_SUBSECTION_FAILURE", error: error.message });
     }
   };
 }
+
+export function DeleteSection(sectionId) {
+  console.log("section id idise ", sectionId);
+  return async (dispatch) => {
+    try {
+      const responce = await apiconnector(
+        "DELETE",
+        `${catagories.CREATE_COURSE_DELETE_SECTION}?sectionId=${sectionId}`,
+        null,
+        {
+          "Content-Type": "multipart/form-data",
+          Auth: `Bearer ${localStorage.getItem("token")}`,
+        }
+      );
+      dispatch({ type: "DELETE_SECTION_SUCCESS", payload: responce });
+      return responce;
+    } catch (error) {}
+  };
+}
+
+export function Fetchsection(courseId) {
+  return async (dispatch) => {
+    try {
+      const fetchsection = await apiconnector(
+        "GET",
+        `${catagories.FETCH_SECTION}?courseId=${courseId}`,
+        null,
+        {
+          "Content-Type": "multipart/form-data",
+          Auth: `Bearer ${localStorage.getItem("token")}`,
+        }
+      );
+      const { data } = fetchsection;
+      dispatch({ type: "FETCH_SECTION_SUCCESS", payload: data });
+      return data;  // Return the data directly
+    } catch (error) {
+      console.error("Error fetching section:", error);
+    }
+  };
+}
+
