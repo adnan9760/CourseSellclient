@@ -103,8 +103,8 @@ const Navbar = (props) => {
             <button
               onClick={() => {
                 setIsLoggedIn(false);
-                localStorage.removeItem("token");
-                 localStorage.removeItem("user"); 
+                localStorage.removeItem("token"); 
+                localStorage.removeItem("user");
                 toast.success("Logout successfully");
               }}
               className="bg-richblack-800 py-[8px] px-[12px] rounded-[8px] border border-richblack-700"
