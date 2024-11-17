@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { json } from "react-router-dom";
 
 const initialState = {
     cart:localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")):[],
@@ -16,6 +15,7 @@ const cartSlice  = createSlice({
     reducers:{
         addProduct(state,action){
             const product = action.payload;
+            console.log("idddddddddddd",product.id)
             const existProduct = state.cart.find(item => item.id === product.id);
             if(existProduct){
                toast.success("Course Already in cart");

@@ -41,6 +41,7 @@ export default function AddCourse() {
                     </div>
                 </div>
                 <div className='w-[80%] mx-auto bg-richblack-700 m-6 '>
+                    
                 { step === 1 && <CourseInformation></CourseInformation>}
                {step === 2 && <CourseBuilder></CourseBuilder>}
                {step === 3 && <Publish></Publish>}

@@ -361,4 +361,76 @@ export function Fetchsection(courseId) {
     }
   };
 }
+export function markaspublic(courseId){
+  return async (dispatch)=>{
+            try {
+                const responce = await apiconnector("PUT",`${catagories.PUBLIC_COURSE}?courseId=${courseId}`,
+                  null,
+                  {
+                    "Content-Type": "multipart/form-data",
+                    Auth: `Bearer ${localStorage.getItem("token")}`,
+                  }
+                )
+                console.log("response",responce)
+                return responce
+            } catch (error) {
+              console.error("Update course as a public error:", error);
+            }
+  }
+}
+
+export function fetchuserdetail(userId) {
+  return async (dispatch) => {
+    try {
+      const response = await apiconnector(
+        "GET",
+        `${catagories.FETCH_COURSE}?userId=${userId}`,
+        null,
+        {
+          "Content-Type": "multipart/form-data",
+          Auth: `Bearer ${localStorage.getItem("token")}`,
+        }
+      );
+
+      console.log("Response:", response);
+
+     return response.data;
+
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+
+      dispatch({
+        type: 'FETCH_USER_DETAIL_FAILURE',
+        payload: error.message,
+      });
+    }
+  };
+}
+export function fetchallcoursedetail(){
+  return async (dispatch) => {
+   try {
+      const  responce = await apiconnector("GET",catagories.FETCH_ALL_COURSE,null);
+
+
+      console.log("res",responce);
+      return responce;
+   } catch (error) {
+    console.error("Error fetching all course details:", error);
+   }
+  }
+}
+
+ export function fetchcoursedetail(courseId){
+  return async (dispatch) => {
+       try {
+        const responce = await apiconnector("GET",`${catagories.FETCH_SPECIFICCOURSE}?courseId=${courseId}`,null);
+
+       console.log("res",responce);
+       return responce.data;
+       } catch (error) {
+        console.error("Error fetching course details:", error);
+       }
+  }
+ }
+
 

@@ -19,6 +19,7 @@ export default function CourseInformation() {
     image: "",
     courseBenefit: "",
   };
+  
   const navigate = useNavigate();
   const { editcourse } = useSelector((state) => state.course);
   const dispatch = useDispatch();

@@ -17,6 +17,10 @@ export const catagories = {
   CREATE_COURSE_SUBSECTION_DELETE:BASE_URL + "/course/deleteSubsection",
   CREATE_COURSE_SUBSECTION_FETCH:BASE_URL + "/course/fetchSubsection",
   FETCH_SECTION: BASE_URL+"/course/fetchsection",
+  PUBLIC_COURSE: BASE_URL + "/course/markaspublic",
+  FETCH_COURSE: BASE_URL + "/Profile/fetchuserdata",
+  FETCH_ALL_COURSE:BASE_URL + "/course/getCourseAlldetails",
+  FETCH_SPECIFICCOURSE: BASE_URL + "/course/getCourseDetail"
 
 
   

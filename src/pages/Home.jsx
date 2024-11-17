@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import online from "../assets/online_course.webp";
 import Card from "../Components/Card";
 import Highlightext from "../Components/Highlightext";
 import BeInstructor from "../Components/BeInstructor";
 import Comment from "../Components/Comment";
+import { fetchallcoursedetail } from "../services/operation/authapi";
+import { useDispatch } from "react-redux";
 function Home() {
+  const [courses , setcourses] = useState([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await dispatch(fetchallcoursedetail());
+        console.log("responceces",response.data.data)
+        setcourses(response.data.data);
+      } catch (error) {
+        console.error("Error fetching course details:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
   return (
     <div>
       <div className=" text-white flex flex-col justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto">
@@ -64,10 +82,13 @@ function Home() {
                 </p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
+                {
+                  courses.map((course,index)=>{
+                        return <div>
+                          <Card course={course}></Card>
+                        </div>
+                  })
+                }
               </div>
               <div className="flex mx-auto justify-center items-center mt-8">
                 <a

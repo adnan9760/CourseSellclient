@@ -7,8 +7,17 @@ import { MdOutlineArrowDropDownCircle } from "react-icons/md";
 import { NavbarLinks } from "../data/navbar-link";
 import apiconnector from "../services/apiconnector";
 import { catagories } from "../services/apis";
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { addProduct } from '../reducer/slices/cartSlice'
+import { removeProduct } from '../reducer/slices/cartSlice'
+import { clearCart } from '../reducer/slices/cartSlice'
 
 const Navbar = (props) => {
+  const cart = useSelector((state)=>state.cart.cart);
+    const total = useSelector((state)=>state.cart.total);
+    const dispatch = useDispatch();
+    const totalitem = useSelector((state)=>state.cart.totalItem)
   const [Sublink, setSublink] = useState([]);
   const { isLoggedIn, setIsLoggedIn } = props;
 
@@ -25,6 +34,9 @@ const Navbar = (props) => {
 
     fetchSublink();
   }, []);
+  function handleclick(){
+
+  }
 
   return (
     <div className="flex justify-between bg-richblack-900 items-center w-11/12 max-w-[1160px] py-4 mx-auto">
@@ -79,14 +91,20 @@ const Navbar = (props) => {
         {isLoggedIn && (
           <>
             <Link to="/cart">
-              <button className="py-[8px] px-[12px]">
+            <div className="relative">
+              <button onClick={handleclick}  className="py-[8px] px-[12px]">
                 <FaShoppingCart size={24} />
               </button>
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+          {cart.length}
+        </span>
+              </div>
             </Link>
             <button
               onClick={() => {
                 setIsLoggedIn(false);
-                localStorage.removeItem("token"); // Ensure token is cleared
+                localStorage.removeItem("token");
+                 localStorage.removeItem("user"); 
                 toast.success("Logout successfully");
               }}
               className="bg-richblack-800 py-[8px] px-[12px] rounded-[8px] border border-richblack-700"

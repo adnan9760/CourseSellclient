@@ -4,6 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { CreateBuilder, Fetchsection } from '../../../../services/operation/authapi';
 import { useDispatch } from 'react-redux';
 import LeatureAdd from './LeatureAdd';
+import { setStep } from "../../../../reducer/slices/courseSlice";
+
 
 export default function CourseBuilder() {
   const dispatch = useDispatch();
@@ -28,7 +30,7 @@ export default function CourseBuilder() {
     };
   
     fetchData();
-  }, [call, dispatch]); // Dependencies to re-run the effect when 'call' or 'dispatch' changes
+  }, [call]); // Dependencies to re-run the effect when 'call' or 'dispatch' changes
 
   const handleCallToggle = (newCallState) => {
     console.log("presssss", newCallState);
@@ -72,6 +74,7 @@ export default function CourseBuilder() {
   }
 
   return (
+    <div>
     <div className="p-4 space-y-2 rounded-lg">
       <form onSubmit={handleSubmit}>
         <p className="text-[28px] font-mono bold">Course Builder</p>
@@ -111,6 +114,18 @@ export default function CourseBuilder() {
           />
         ))
       )}
+
+  
+      </div>
+      <div className='flex justify-end mr-6 space-x-8'>
+      <button onClick={() => {
+                  dispatch(setStep(1));
+                }} type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Back</button>
+      <button onClick={() => {
+                  dispatch(setStep(3));
+                }} type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Next</button>
+      </div>
+     
     </div>
   );
 }

@@ -18,7 +18,9 @@ import EnrolledCourses from "./Components/DashBoard/EnrolledCourses";
 import Cart from "./Components/DashBoard/Cart";
 import AddCourse from "./Components/DashBoard/Instructor/Courses/AddCourse";
 import { useSelector } from "react-redux";
-
+import MyCourses from "./Components/DashBoard/MyCourse";
+import CourseDetailPage from "./Components/Coursecarddetail";
+import ShoppingCart from "./Components/Addtocart";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -50,7 +52,7 @@ function App() {
   }, [user]);
 
   if (loading) {
-    return <div>Loading...</div>; // Placeholder, replace with your spinner or loader component
+    return <div>Loading...</div>;
   }
 
   return (
@@ -65,7 +67,8 @@ function App() {
         <Route path="/signup" element={<Signup setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/verifyotp" element={<VerifyOTP />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
-
+        <Route path="/cart" element={<ShoppingCart />} />
+        <Route path="/course/*" element={<CourseDetailPage></CourseDetailPage>}/>
         <Route
           path="/dashboard/*"
           element={
@@ -74,6 +77,7 @@ function App() {
             </PrivateRoute>
           }
         >
+           
           <Route path="my-profile" element={<MyProfile />} />
           {user?.accountType === "student" && (
             <Route path="enrolled-courses" element={<EnrolledCourses />} />
@@ -83,6 +87,7 @@ function App() {
           )}
           <Route path="edit" element={<Edit />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="my-courses" element={<MyCourses></MyCourses>}/>
         </Route>
         <Route path="*" element={<Home />} />
       </Routes>

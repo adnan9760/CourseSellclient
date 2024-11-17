@@ -23,7 +23,6 @@ export default function SubLecture({ sectionName, sectionid ,currentCallState, o
     const fetchData = async () => {
       try {
         const data = await dispatch(fetchSubsection(sectionid));
-              console.log("data",data.data.subSection);
         setsubsection(data.data.subSection);
       } catch (error) {
         console.error("Error fetching subsection:", error);
@@ -40,8 +39,7 @@ export default function SubLecture({ sectionName, sectionid ,currentCallState, o
  function handleDeleteClick(){
        const responce = dispatch(DeleteSection(sectionid));
        const newCallState = !fetchcall;
-       console.log("jdkssdddkdsksjdjk",newCallState); // Toggle the state
-       setfetchCall(newCallState);  // Update the local state in the child
+       setfetchCall(newCallState); 
        onCallToggle(newCallState); 
 
   
