@@ -4,6 +4,7 @@ import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginHandler } from "../services/operation/authapi";
+import { setUser } from "../reducer/slices/profileSlice";
 
 const LoginForm = ({ setIsLoggedIn }) => {
     const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
           e.preventDefault();
           try {
             const response = await dispatch(LoginHandler(formData,navigate));
-
+                      console.log("responcejdkf ",response)
                     } catch (error) {
                         console.log(error);
                         }

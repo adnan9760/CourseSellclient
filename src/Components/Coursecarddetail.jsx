@@ -209,12 +209,22 @@ const CourseDetailPage = () => {
             </div>
             
             <button
-  onClick={() => dispatch(addProduct({
-    id:course._id,
-    name: course.title,
-    image: course.thumbnail.secure_url,
-    price: course.price
-  }))}
+ onClick={() => {
+  const isLoggedIn = localStorage.getItem('token'); 
+
+  if (isLoggedIn) {
+    dispatch(addProduct({
+      id: course._id,
+      name: course.title,
+      image: course.thumbnail.secure_url,
+      price: course.price
+    }));
+  } else {
+    alert("Please log in to add items to the cart.");
+    window.location.href = '/login';
+  }
+}}
+
   className="w-full bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg hover:bg-yellow-400 active:bg-yellow-600 transition-colors duration-150"
 >
   Add to Cart

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Trash2, Store } from 'lucide-react';
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
@@ -6,25 +6,76 @@ import { addProduct } from '../reducer/slices/cartSlice'
 import { removeProduct } from '../reducer/slices/cartSlice'
 import { clearCart } from '../reducer/slices/cartSlice'
 import toast from 'react-hot-toast';
+import { capturestate } from '../services/operation/authapi';
+import { handler } from 'tailwindcss-animate';
 const ShoppingCart = () => {
-    const courseIds = JSON.parse(localStorage.getItem('cart').id) || [];
-    console.log("idddddd",courseIds)
     const cart = useSelector((state)=>state.cart.cart);
     const total = useSelector((state)=>state.cart.total);
+    const user = JSON.parse(localStorage.getItem("user")); 
+    const cid = user?._id;
+    const courseIdString = localStorage.getItem(`cart_${cid}`);
+    const course = JSON.parse(courseIdString);
+    const courseId = course[0]?.id;
     const dispatch = useDispatch();
-    const totalitem = useSelector((state)=>state.cart.totalItem)
+    const totalitem = useSelector((state)=>state.cart.totalItem);
+    useEffect(() => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      };
+    }, []);
     
     
   const handleRemoveProduct = (id) => {
     dispatch(removeProduct(id));
-    toast.success(`Product removed from cart`);
   };
-  function handleclick(){
-    
-  }
+    async function handlecheckout(){
+    if(cart.length === 0) return;
+    try {
+        const responce = await dispatch(capturestate(courseId));
+        console.log("data",responce.success);
+        if(responce.success === true){
+          const {Amount , order_id} = responce;
+
+          const options = {
+            "key": "rzp_test_WsUKvsDYu1mbwO",
+            "amount": Amount*100,
+            "currency": "INR",
+             order_id,
+             handler: function(paymentResult){
+              console.log("paymrnt success",paymentResult);
+              dispatch(clearCart());
+              toast.success("Payment Successful!");
+             },
+             prefill:{
+              name: "Rahul",
+              email: "rahul@gmail.com",
+              contact: "1234567890",
+
+             }
+             
+
+          };
+          const razorpay = new window.Razorpay(options);
+        razorpay.open();
+        }
+        else{
+          toast.error("Failed to initialize payment. Please try again.");
+        }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("An error occurred during checkout. Please try again.");
+    }
+
+
+   }
 
 
   return (
+    
     <div className="w-full max-w-2xl bg-slate-900 text-slate-100 rounded-lg shadow-xl">
       <div className="p-4 border-b border-slate-800">
         <div className="flex items-center justify-between">
@@ -85,7 +136,7 @@ const ShoppingCart = () => {
             <span className="font-bold text-lg">{totalitem.toFixed(2)}</span>
           </div>
           
-          <button  onClick={handleclick}
+          <button onClick={handlecheckout}
             className={`w-full py-3 px-4 rounded bg-yellow-50 text-white font-semibold
               ${cart.length === 0 
                 ? 'opacity-50 cursor-not-allowed' 

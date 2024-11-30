@@ -20,7 +20,8 @@ export const catagories = {
   PUBLIC_COURSE: BASE_URL + "/course/markaspublic",
   FETCH_COURSE: BASE_URL + "/Profile/fetchuserdata",
   FETCH_ALL_COURSE:BASE_URL + "/course/getCourseAlldetails",
-  FETCH_SPECIFICCOURSE: BASE_URL + "/course/getCourseDetail"
+  FETCH_SPECIFICCOURSE: BASE_URL + "/course/getCourseDetail",
+  PAYMENT_CAPTURE:BASE_URL +"/payment/capturestate",
 
 
   

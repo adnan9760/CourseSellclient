@@ -105,6 +105,9 @@ const Navbar = (props) => {
                 setIsLoggedIn(false);
                 localStorage.removeItem("token"); 
                 localStorage.removeItem("user");
+                localStorage.removeItem("cart");
+                localStorage.removeItem("totalItem");
+                localStorage.removeItem("total");
                 toast.success("Logout successfully");
               }}
               className="bg-richblack-800 py-[8px] px-[12px] rounded-[8px] border border-richblack-700"

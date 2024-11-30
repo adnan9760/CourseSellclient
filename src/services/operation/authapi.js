@@ -7,6 +7,7 @@ import { Form, useNavigate } from "react-router-dom";
 import { setToken } from "../../reducer/slices/authSlice";
 import { setUser } from "../../reducer/slices/profileSlice";
 import { setStep } from "../../reducer/slices/courseSlice";
+import { initializeUserCart } from "../../reducer/slices/cartSlice";
 
 export function sendOtp(email, navigate) {
   return async (dispatch) => {
@@ -77,27 +78,42 @@ export function LoginHandler({ email, password }, navigate) {
         email,
         password,
       });
-      console.log("response data1", response.data.success);
-      if (!response.data.success === true) {
+
+      console.log("response data", response.data);
+
+      if (!response.data.success) {
         throw new Error(response.data.message);
       }
+
       toast.success("Login Successful");
+
+      const userId = response.data.user._id;
+      
       dispatch(setToken(response.data.token));
 
       const userImage =
         response.data?.user?.image !== null
           ? response.data.user.image
           : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.firstName} ${response.data.user.lastName}`;
-      console.log("image", userImage);
+
       const updatedUser = { ...response.data.user, image: userImage };
-      console.log("upadted user", updatedUser);
+      console.log("Updated user:", updatedUser);
+
       dispatch(setUser(updatedUser));
+
       localStorage.setItem("token", JSON.stringify(response.data.token));
       localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      dispatch(initializeUserCart(userId));
+
+      // Navigate to the user's profile page
       navigate("/dashboard/my-profile");
-    } catch (error) {}
+    } catch (error) {
+      console.error("Login error:", error);  // Handle errors
+    }
   };
 }
+
 
 export function forgetpassword(props) {
   const { email } = props;
@@ -431,6 +447,26 @@ export function fetchallcoursedetail(){
         console.error("Error fetching course details:", error);
        }
   }
- }
+ };
+export function capturestate(courseId){
+  return async (dispatch) => {
+    try {
+      const responce = await apiconnector("POST",`${catagories.PAYMENT_CAPTURE}?courseId=${courseId}`,null,
+        {
+          "Content-Type": "multipart/form-data",
+          Auth: `Bearer ${localStorage.getItem("token")}`,
+        }
+   
+      );
+      console.log("respayment",responce);
+      return responce.data;
+    
+    } catch (error) {
+      
+    }
+  }
+}
+
+ 
 
 

@@ -67,7 +67,11 @@ function App() {
         <Route path="/signup" element={<Signup setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/verifyotp" element={<VerifyOTP />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
-        <Route path="/cart" element={<ShoppingCart />} />
+        <Route path="/cart" element={
+                <PrivateRoute isLoggedIn={isLoggedIn}>
+                  <ShoppingCart />
+                  </PrivateRoute>
+               } />
         <Route path="/course/*" element={<CourseDetailPage></CourseDetailPage>}/>
         <Route
           path="/dashboard/*"
@@ -77,6 +81,7 @@ function App() {
             </PrivateRoute>
           }
         >
+               
            
           <Route path="my-profile" element={<MyProfile />} />
           {user?.accountType === "student" && (
