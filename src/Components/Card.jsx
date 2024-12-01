@@ -10,6 +10,7 @@ function Card({ course }) {
   const navigate = useNavigate();
   function handleclick(){
     navigate("/course/?courseid="+course._id);
+    
   }
   return (
     <div className="group h-full">

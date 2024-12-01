@@ -22,6 +22,10 @@ export const catagories = {
   FETCH_ALL_COURSE:BASE_URL + "/course/getCourseAlldetails",
   FETCH_SPECIFICCOURSE: BASE_URL + "/course/getCourseDetail",
   PAYMENT_CAPTURE:BASE_URL +"/payment/capturestate",
+  FETCH_ENROLL_COURSE:BASE_URL +"/course/fetchenrollcourse",
+  CREATE_RATING_REVIEW:BASE_URL + "/course/createReview",
+  FETCH_RATING_REVIEW:BASE_URL + "/course/fetchAllReview",
+  FETCH_AVG_RATING:BASE_URL + "/course/GetAvgReviews",
 
 
   

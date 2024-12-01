@@ -12,6 +12,7 @@ import ExploreCourse from "./pages/ExploreCourse";
 import VerifyOTP from "./pages/VerifyOTP";
 import ForgetPassword from "./pages/ForgetPassword";
 import Course from "./pages/Course";
+import ContactUs from "./pages/About";
 import MyProfile from "./Components/DashBoard/MyProfile";
 import Edit from "./Components/Edit";
 import EnrolledCourses from "./Components/DashBoard/EnrolledCourses";
@@ -20,6 +21,7 @@ import AddCourse from "./Components/DashBoard/Instructor/Courses/AddCourse";
 import { useSelector } from "react-redux";
 import MyCourses from "./Components/DashBoard/MyCourse";
 import CourseDetailPage from "./Components/Coursecarddetail";
+import Learningpage from "./Components/DashBoard/Learningpage";
 import ShoppingCart from "./Components/Addtocart";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -66,6 +68,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/signup" element={<Signup setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/verifyotp" element={<VerifyOTP />} />
+        <Route path="/contact" element={<ContactUs></ContactUs>}></Route>
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/cart" element={
                 <PrivateRoute isLoggedIn={isLoggedIn}>
@@ -73,6 +76,8 @@ function App() {
                   </PrivateRoute>
                } />
         <Route path="/course/*" element={<CourseDetailPage></CourseDetailPage>}/>
+        <Route path="/learning" element={<Learningpage></Learningpage>}/>
+
         <Route
           path="/dashboard/*"
           element={

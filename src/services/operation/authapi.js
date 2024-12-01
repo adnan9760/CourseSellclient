@@ -467,6 +467,86 @@ export function capturestate(courseId){
   }
 }
 
- 
+export function fetchEnrolledCourse(){
+  return async (dispatch) => {
+    try {
+      const responce = await apiconnector("GET",catagories.FETCH_ENROLL_COURSE,
+        null,
+        {
+          "Content-Type": "multipart/form-data",
+          Auth: `Bearer ${localStorage.getItem("token")}`,
+        }
+   
+      );
+      console.log("res",responce);
+      return responce.data;
+    } catch (error) {
+      console.error("Error fetching enrolled courses:", error);
+    }
+  }
+}
+
+export function createRatingReview(ReviewData) {
+  return async (dispatch) => {
+    try {
+      const { rating, review, course_id } = ReviewData.ReviewData;
+      const response = await apiconnector(
+        "POST",
+        catagories.CREATE_RATING_REVIEW,
+        {
+          rating: rating, 
+          review: review, 
+          courseId:course_id, 
+        },
+        {
+          "Content-Type": "multipart/form-data", 
+          Auth: `Bearer ${localStorage.getItem("token")}`,
+        }
+      );
+
+      console.log("Review created successfully:", response);
+      return response;
+    } catch (error) {
+      console.error("Error creating review:", error);
+    }
+  };
+}
+
+
+export function fetchAllReview({courseId}) {
+
+  return async (dispatch) => {
+    try {
+      console.log("cour",courseId)
+      const response = await apiconnector(
+        "GET",
+        `${catagories.FETCH_RATING_REVIEW}?courseId=${courseId}`,
+        null,
+        {
+          "Content-Type": "multipart/form-data", 
+          Auth: `Bearer ${localStorage.getItem("token")}`,
+        }
+      );
+
+      console.log("Review fetch successfully:", response);
+      return response;
+    } catch (error) {
+      console.error("Error fetching review:", error);
+    }
+  };
+}
+
+
+ export function GetAvgReviews({courseId}){
+  return async (dispatch) => {
+    try {
+       const response = await apiconnector("GET", `${catagories.FETCH_RATING_REVIEW}?courseId=${courseId}`,null);
+       const data = response.data;
+       console.log(data);
+    } catch (error) {
+      console.error("Error fetching review:", error); 
+    }
+  }
+ }
 
 
