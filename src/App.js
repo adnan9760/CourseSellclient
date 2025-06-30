@@ -7,12 +7,12 @@ import PrivateRoute from "./Components/PrivateRoute";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import Home from "./pages/Home";
-import About from "./pages/About";
+import AboutUs from "./pages/About";
 import ExploreCourse from "./pages/ExploreCourse";
 import VerifyOTP from "./pages/VerifyOTP";
 import ForgetPassword from "./pages/ForgetPassword";
 import Course from "./pages/Course";
-import ContactUs from "./pages/About";
+import ContactUs from "./pages/ContactUs";
 import MyProfile from "./Components/DashBoard/MyProfile";
 import Edit from "./Components/Edit";
 import EnrolledCourses from "./Components/DashBoard/EnrolledCourses";
@@ -65,7 +65,7 @@ function App() {
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/explore" element={<ExploreCourse />} />
         <Route path="/catalog" element={<Course />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/About" element={<AboutUs />} />
         <Route path="/signup" element={<Signup setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/verifyotp" element={<VerifyOTP />} />
         <Route path="/contact" element={<ContactUs></ContactUs>}></Route>

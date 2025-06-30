@@ -6,47 +6,49 @@ import BeInstructor from "../Components/BeInstructor";
 import Comment from "../Components/Comment";
 import { fetchallcoursedetail } from "../services/operation/authapi";
 import { useDispatch } from "react-redux";
+
 function Home() {
-  const [courses , setcourses] = useState([]);
+  const [courses, setCourses] = useState([]);
   const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await dispatch(fetchallcoursedetail());
-        console.log("responceces",response.data.data)
-        setcourses(response.data.data);
+        console.log("Courses Data:", response.data.data);
+        setCourses(response.data.data);
       } catch (error) {
         console.error("Error fetching course details:", error);
       }
     };
-  
+
     fetchData();
-  }, []);
-  
+  }, [dispatch]);
+
   return (
     <div>
-      <div className=" text-white flex flex-col justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto">
+      <div className="text-white flex flex-col justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto">
+        {/* Header Section */}
         <header className="bg-primary text-primary-foreground py-6 md:py-12 text-white">
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="space-y-4">
+              <div className="space-y-4 transition-opacity duration-500 hover:opacity-90">
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
                   Unlock Your Potential with Our Online Courses
                 </h1>
                 <p className="text-lg md:text-xl text-primary-foreground/80">
-                  Explore a wide range of courses and take your skills to the
-                  next level.
+                  Explore a wide range of courses and take your skills to the next level.
                 </p>
                 <div className="flex gap-4">
                   <a
-                    className="inline-flex h-10 bg-yellow-400 items-center justify-center rounded-md bg-primary-foreground px-6 text-sm font-medium text-primary shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                    className="inline-flex h-10 bg-yellow-400 items-center justify-center rounded-md px-6 text-sm font-medium text-primary shadow transition-transform transform hover:scale-105 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                     href="#"
                     rel="ugc"
                   >
                     Browse Courses
                   </a>
                   <a
-                    className="inline-flex h-10 items-center justify-center rounded-md border border-primary-foreground bg-transparent px-6 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-foreground/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                    className="inline-flex h-10 items-center justify-center rounded-md border border-primary-foreground bg-transparent px-6 text-sm font-medium text-primary-foreground shadow-sm transition-transform transform hover:scale-105 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                     href="#"
                     rel="ugc"
                   >
@@ -60,13 +62,16 @@ function Home() {
                   width="800"
                   height="600"
                   alt="Online Courses"
-                  className="rounded-xl object-cover aspect-[4/3]"
+                  className="rounded-xl object-cover aspect-[4/3] shadow-lg hover:shadow-xl transition-shadow duration-300"
                 />
               </div>
             </div>
           </div>
         </header>
-        <main className="flex-1">
+
+        {/* Main Section */}
+        <main className="flex-1  w-11/12 max-w-[1160px]">
+          {/* Featured Courses Section */}
           <section className="py-12 md:py-20">
             <div className="container mx-auto px-4 md:px-6">
               <div className="flex flex-col items-center text-center space-y-4 mb-8">
@@ -77,22 +82,23 @@ function Home() {
                   Explore Our Top Courses
                 </h2>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  Discover a wide range of online courses to enhance your skills
-                  and knowledge.
+                  Discover a wide range of online courses to enhance your skills and knowledge.
                 </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {
-                  courses.map((course,index)=>{
-                        return <div>
-                          <Card course={course}></Card>
-                        </div>
-                  })
-                }
-              </div>
+              {/* Horizontal Scrollable Courses */}
+              <div className="overflow-x-scroll overflow-y-scroll  whitespace-nowrap no-scrollbar">
+  <div className="inline-flex gap-6 max-w-full">
+    {courses.slice(0, 10).map((course, index) => (
+      <div key={index} className="min-w-[250px] transition-transform transform hover:scale-105">
+        <Card course={course} />
+      </div>
+    ))}
+  </div>
+</div>
+
               <div className="flex mx-auto justify-center items-center mt-8">
                 <a
-                  className="inline-flex h-10 bg-yellow-400 items-center justify-center rounded-md bg-primary-foreground px-6 text-sm font-medium text-primary shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                  className="inline-flex h-10 bg-yellow-400 items-center justify-center rounded-md px-6 text-sm font-medium text-primary shadow transition-transform transform hover:scale-105 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                   href="/Explore"
                   rel="ugc"
                 >
@@ -101,6 +107,8 @@ function Home() {
               </div>
             </div>
           </section>
+
+          {/* Course Categories Section */}
           <section className="py-12 md:py-20 bg-muted">
             <div className="container mx-auto px-4 md:px-6">
               <div className="flex flex-col items-center text-center space-y-4 mb-8">
@@ -259,95 +267,40 @@ function Home() {
               </div>
             </div>
           </section>
+
           <section>
-            <BeInstructor></BeInstructor>
+            <BeInstructor />
           </section>
           <section>
-            <Comment></Comment>
+            <Comment />
           </section>
         </main>
       </div>
-      <footer className="bg-white text-black mx-auto text-muted-foreground py-8 ">
+
+      {/* Footer */}
+      <footer className="bg-white text-black mx-auto text-muted-foreground py-8">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center">
-            <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Company</h3>
-              <ul className="space-y-1">
-                <li>
-                  <a href="#" rel="ugc">
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" rel="ugc">
-                    Careers
-                  </a>
-                </li>
-                <li>
-                  <a href="#" rel="ugc">
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a href="#" rel="ugc">
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Courses</h3>
-              <ul className="space-y-1">
-                <li>
-                  <a href="#" rel="ugc">
-                    Web Development
-                  </a>
-                </li>
-                <li>
-                  <a href="#" rel="ugc">
-                    Data Science
-                  </a>
-                </li>
-                <li>
-                  <a href="#" rel="ugc">
-                    Digital Marketing
-                  </a>
-                </li>
-                <li>
-                  <a href="#" rel="ugc">
-                    Machine Learning
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Support</h3>
-              <ul className="space-y-1">
-                <li>
-                  <a href="#" rel="ugc">
-                    FAQ
-                  </a>
-                </li>
-                <li>
-                  <a href="#" rel="ugc">
-                    Help Center
-                  </a>
-                </li>
-                <li>
-                  <a href="#" rel="ugc">
-                    Accessibility
-                  </a>
-                </li>
-                <li>
-                  <a href="#" rel="ugc">
-                    Refund Policy
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Legal</h3>
-            </div>
+            {/* Footer Links */}
+            {[
+              { title: "Company", links: ["About Us", "Careers", "Blog", "Contact"] },
+              { title: "Courses", links: ["Web Development", "Data Science", "Digital Marketing", "Machine Learning"] },
+              { title: "Support", links: ["FAQ", "Help Center", "Accessibility", "Refund Policy"] },
+              { title: "Legal", links: ["Terms of Use", "Privacy Policy"] },
+            ].map((section, index) => (
+              <div key={index} className="space-y-2">
+                <h3 className="text-lg font-semibold">{section.title}</h3>
+                <ul className="space-y-1">
+                  {section.links.map((link, i) => (
+                    <li key={i}>
+                      <a href="#" rel="ugc">
+                        {link}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </footer>

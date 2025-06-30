@@ -5,6 +5,7 @@ import { fetchcoursedetail } from '../services/operation/authapi';
 import { useSelector } from 'react-redux';
 import { addProduct } from '../reducer/slices/cartSlice'
 import { removeProduct } from '../reducer/slices/cartSlice'
+import { GetAvgReviews } from '../services/operation/authapi';
 import { clearCart } from '../reducer/slices/cartSlice'
 import { 
   ChevronDown, 
@@ -29,8 +30,26 @@ const CourseDetailPage = () => {
   const [course, setCourse] = useState(null);
   const [activeChapter, setActiveChapter] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [loading,setloading]= useState(false)
+  const [loading,setloading]= useState(false);
+  const [Avgrating,setAvgrating]= useState(0);
 
+
+
+  useEffect(()=>{
+    // const courseId = course._id;
+    const fetchReviews = async () => {
+      try {
+           const responce = await dispatch(GetAvgReviews({courseId}));
+           console.log("responces",responce);
+           setAvgrating(responce.AvgRating);
+
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+    fetchReviews();
+   },[]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -169,6 +188,7 @@ const CourseDetailPage = () => {
 
           {/* Reviews Section */}
           <div className="space-y-6">
+          {/* <h2 className="text-2xl font-semibold">{Avgrating} Course Rating</h2> */}
             <h2 className="text-2xl font-semibold">Student Reviews</h2>
             <div className="space-y-4">
               {course.reviews && course.reviews.map((review, index) => (

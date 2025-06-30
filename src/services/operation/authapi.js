@@ -535,14 +535,26 @@ export function fetchAllReview({courseId}) {
     }
   };
 }
-
+  export function GetallReview (){
+    return async (dispatch) => {
+      try {
+        const responce = await apiconnector("GET",catagories.FETCH_ALL_REVIEW,null);
+        console.log("Review fetch successfullydddd:", responce.data);
+        return responce;
+      } catch (error) {
+        console.error("Error fetching review:", error);
+      }
+    }
+  }
 
  export function GetAvgReviews({courseId}){
+ 
   return async (dispatch) => {
     try {
-       const response = await apiconnector("GET", `${catagories.FETCH_RATING_REVIEW}?courseId=${courseId}`,null);
+       const response = await apiconnector("GET", `${catagories.FETCH_AVG_RATING}?courseId=${courseId}`,null);
        const data = response.data;
        console.log(data);
+       return data;
     } catch (error) {
       console.error("Error fetching review:", error); 
     }

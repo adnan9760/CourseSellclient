@@ -124,12 +124,21 @@ export default function CourseInformation() {
   const handleReqRemove = (reqToRemove) => {
     setRequirement(requirement.filter((req) => req !== reqToRemove));
   };
-
+useEffect(()=>{
+  const saved = JSON.parse(localStorage.getItem('formData'));
+  if(saved){
+    setFormData(saved);
+  }
+},[])
+useEffect(() => {
+  localStorage.setItem("formData", JSON.stringify(formData));
+}, [formData]);
   const handleSubmit = async (e) => {
     e.preventDefault();
 const coursedata = {
     ...formData
 };
+
 console.log("Coursedata",coursedata);
     try {
       const data =  await dispatch(CreateCourse(coursedata));
@@ -378,3 +387,4 @@ console.log("Coursedata",coursedata);
     </div>
   );
 }
+

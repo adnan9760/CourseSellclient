@@ -25,7 +25,8 @@ export const catagories = {
   FETCH_ENROLL_COURSE:BASE_URL +"/course/fetchenrollcourse",
   CREATE_RATING_REVIEW:BASE_URL + "/course/createReview",
   FETCH_RATING_REVIEW:BASE_URL + "/course/fetchAllReview",
-  FETCH_AVG_RATING:BASE_URL + "/course/GetAvgReviews",
+  FETCH_AVG_RATING:BASE_URL + "/course/GetAvgRating",
+  FETCH_ALL_REVIEW:BASE_URL + "/course/getAllRating",
 
 
   

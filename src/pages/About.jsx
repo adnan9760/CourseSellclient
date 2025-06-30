@@ -1,122 +1,59 @@
-import React, { useState } from "react";
+import React from "react";
 
-const ContactUs = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitted Data:", formData);
-
-    // TODO: Replace this with your form submission logic
-    alert("Your message has been sent successfully!");
-
-    // Clear form
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
-  };
-
+const AboutUs = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-richblack-900 to-richblack-800 text-gray-200 flex items-center justify-center px-6 py-12">
-      <div className="max-w-4xl w-full bg-richblack-700 p-10 rounded-lg shadow-lg">
-        <h2 className="text-4xl font-extrabold text-yellow-500 text-center mb-8">
-          Contact Us
-        </h2>
-        <p className="text-center text-gray-400 mb-8">
-          Have questions or feedback? We'd love to hear from you! Fill out the form below, and we’ll get back to you as soon as possible.
-        </p>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-semibold mb-2">
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full p-4 bg-richblack-600 text-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 transition"
-              placeholder="Enter your full name"
-            />
+    <div className="bg-richblack-900 text-white min-h-screen py-12">
+      <div className="container mx-auto px-6 lg:px-20">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold mb-4 text-yellow-400">About Us</h1>
+          <p className="text-lg text-gray-300">
+            At <span className="font-semibold text-white">SkillShareHub</span>, we believe in the power of education. 
+            Our mission is to make learning accessible, engaging, and impactful for everyone.
+          </p>
+        </div>
+
+        {/* Statistics Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-gray-800 shadow-lg p-6 rounded-lg text-center">
+            <h2 className="text-4xl font-bold text-yellow-400">10M+</h2>
+            <p className="text-gray-400">Learners Worldwide</p>
           </div>
-          {/* Email */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-semibold mb-2">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full p-4 bg-richblack-600 text-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 transition"
-              placeholder="Enter your email"
-            />
+          <div className="bg-gray-800 shadow-lg p-6 rounded-lg text-center">
+            <h2 className="text-4xl font-bold text-yellow-400">200K+</h2>
+            <p className="text-gray-400">Courses Available</p>
           </div>
-          {/* Subject */}
-          <div>
-            <label htmlFor="subject" className="block text-sm font-semibold mb-2">
-              Subject
-            </label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              value={formData.subject}
-              onChange={handleChange}
-              required
-              className="w-full p-4 bg-richblack-600 text-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 transition"
-              placeholder="Enter the subject"
-            />
+          <div className="bg-gray-800 shadow-lg p-6 rounded-lg text-center">
+            <h2 className="text-4xl font-bold text-yellow-400">50K+</h2>
+            <p className="text-gray-400">Expert Instructors</p>
           </div>
-          {/* Message */}
-          <div>
-            <label htmlFor="message" className="block text-sm font-semibold mb-2">
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              required
-              rows="6"
-              className="w-full p-4 bg-richblack-600 text-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 transition"
-              placeholder="Enter your message"
-            />
-          </div>
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-yellow-500 text-black py-3 rounded-lg font-bold text-lg hover:bg-yellow-400 transition duration-300"
-          >
-            Send Message
+        </div>
+
+        {/* Vision and Mission Section */}
+        <div className="bg-gray-800 p-8 rounded-lg shadow-lg mb-12">
+          <h2 className="text-3xl font-semibold text-yellow-400 mb-4">Our Vision</h2>
+          <p className="text-gray-300 mb-6">
+            To revolutionize education by providing affordable and accessible learning opportunities for everyone.
+          </p>
+          <h2 className="text-3xl font-semibold text-yellow-400 mb-4">Our Mission</h2>
+          <p className="text-gray-300">
+            We connect learners with the best instructors worldwide, fostering growth and success in every field.
+          </p>
+        </div>
+
+        {/* Call-to-Action */}
+        <div className="text-center">
+          <h2 className="text-4xl font-bold text-yellow-400 mb-4">Join Our Community</h2>
+          <p className="text-gray-300 text-lg mb-6">
+            Begin your learning journey today and unlock your true potential.
+          </p>
+          <button className="bg-yellow-400 text-gray-900 px-8 py-3 rounded-full shadow-lg hover:bg-emerald-400 transition">
+            Explore Courses
           </button>
-        </form>
-        <div className="text-center text-sm text-gray-500 mt-8">
-          © 2024 Studynotion. All rights reserved.
         </div>
       </div>
     </div>
   );
 };
 
-export default ContactUs;
+export default AboutUs;

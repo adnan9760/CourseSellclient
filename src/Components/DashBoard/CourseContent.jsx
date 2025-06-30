@@ -46,7 +46,6 @@ const handlerclick=(VideoUrl)=>{
         
       </div>
 
-      {/* Sidebar for Course Content */}
       <div className="w-full md:w-1/3 bg-richblack-800 border-l border-richblack-700 p-4">
         <h3 className="text-2xl font-bold text-yellow-500 mb-4">Course Content</h3>
         {course.coursecontent?.length > 0 ? (

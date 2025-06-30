@@ -10,6 +10,7 @@ const RatingAndReviewPage = ({ selectedCourse }) => {
   const [reviews, setReviews] = useState([]);
   const [userRating, setUserRating] = useState(0);
   const [userReview, setUserReview] = useState("");
+  const [Avgrating,setAvgrating]= useState(0);
   const dispatch = useDispatch();
   const handleRatingChange = (rating) => setUserRating(rating);
   const handleReviewChange = (e) => setUserReview(e.target.value);
@@ -23,8 +24,11 @@ const RatingAndReviewPage = ({ selectedCourse }) => {
     const fetchReviews = async () => {
       try {
            const responce = await dispatch(GetAvgReviews({courseId}));
-           console.log("responces",responce)
+           console.log("responces",responce);
+           setAvgrating(responce.AvgRating);
+
       } catch (error) {
+        console.log(error);
         
       }
     }
@@ -108,6 +112,8 @@ const RatingAndReviewPage = ({ selectedCourse }) => {
         </div>
       </div>
       <div>
+      
+      <h3 className="text-2xl font-bold text-yellow-500 mb-4">{Avgrating} course Rating</h3>
         <h3 className="text-2xl font-bold text-yellow-500 mb-4">Reviews</h3>
         {reviews.length > 0 ? (
           <div className="space-y-4">
