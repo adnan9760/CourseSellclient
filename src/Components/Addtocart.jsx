@@ -34,6 +34,7 @@ const ShoppingCart = () => {
 
     try {
       const response = await capturestate(courseId);
+      console.log("Checkout response:", response)
 
       if (response.success) {
         const { Amount, order_id } = response;

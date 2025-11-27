@@ -1,93 +1,197 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import signup from '../services/operation/authapi';
-import { setSignupData } from '../reducer/slices/authSlice';
+import React, { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import signup from "../services/operation/authapi";
 
 export default function VerifyOTP() {
-  const [otp, setOtp] = useState(new Array(6).fill(''));
+  const [otp, setOtp] = useState(new Array(6).fill(""));
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [resendTimer, setResendTimer] = useState(30);
+
+  const inputRefs = useRef([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Fetch the current signup data from Redux
   const currentSignupData = useSelector((state) => state.auth.signupData);
-  console.log("Curren",currentSignupData);
+  console.log("Current Signup Data:", currentSignupData);
 
-  // Handle change in OTP input fields
-  const handleChange = (element, index) => {
-    if (isNaN(element.value)) return;
-    setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
+  // Auto-focus first box
+  useEffect(() => {
+    if (inputRefs.current[0]) {
+      inputRefs.current[0].focus();
+    }
+  }, []);
 
-    // Focus next input
-    if (element.nextSibling) {
-      element.nextSibling.focus();
+  // Simple resend countdown
+  useEffect(() => {
+    if (resendTimer === 0) return;
+    const id = setInterval(() => setResendTimer((t) => t - 1), 1000);
+    return () => clearInterval(id);
+  }, [resendTimer]);
+
+  const handleChange = (value, index) => {
+    if (!/^\d*$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value.slice(-1);
+    setOtp(newOtp);
+
+    if (value && index < otp.length - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+
+    setError("");
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
     }
   };
 
-  // Handle form submission
-  const handleSubmit = async(e) => {
+  const handlePaste = (e) => {
     e.preventDefault();
-    const otpCode = otp.join(''); // Combine OTP digits into a single string
+    const data = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (!data) return;
 
-    console.log("OTP entered:", otpCode); // Log the OTP
+    const next = new Array(6).fill("");
+    for (let i = 0; i < data.length; i++) {
+      next[i] = data[i];
+    }
+    setOtp(next);
 
-    if (otpCode.length === 6) {
-      const updatedSignupData = { ...currentSignupData, otp: otpCode };
-      console.log("Updated Signup Data with OTP:", updatedSignupData);
-      
-     const responce = await dispatch(signup(updatedSignupData));
-     if (responce.success) {
-      navigate('/login');
+    const lastIndex = Math.min(data.length - 1, 5);
+    inputRefs.current[lastIndex]?.focus();
+    setError("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const otpCode = otp.join("");
+
+    if (otpCode.length !== 6) {
+      setError("Please enter all 6 digits.");
+      return;
+    }
+
+    if (!currentSignupData) {
+      setError("Signup session expired. Please sign up again.");
+      navigate("/signup");
+      return;
+    }
+
+    setLoading(true);
+
+    const updatedSignupData = { ...currentSignupData, otp: otpCode };
+    console.log("Final Signup Data:", updatedSignupData);
+
+    const response = await dispatch(signup(updatedSignupData));
+    setLoading(false);
+
+    if (response?.success) {
+      navigate("/login");
     } else {
-      // Optionally navigate to the signup page on failure
-      navigate('/signup');
+      setError("Invalid code. Please try again.");
     }
-    
-    }
+  };
+
+  const handleResend = () => {
+    // TODO: hit resend OTP API here
+    setResendTimer(30);
   };
 
   return (
-    <div className="flex flex-col items-center text-white justify-center h-screen bg-background">
-      <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-md">
-        <div className="flex flex-col mx-auto items-center space-y-1.5 p-6">
-          <h3 className="whitespace-nowrap font-semibold text-white tracking-tight text-2xl">
-            Verify your account
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            Enter the 6-digit code sent to your email to continue.
+  <div className="flex min-h-screen items-center justify-center bg-richblack-800 px-4 text-white">
+    <div className="w-full max-w-md rounded-2xl border border-yellow-500/40 bg-richblack-800 shadow-2xl shadow-yellow-500/30 backdrop-blur-md">
+      {/* Header */}
+      <div className="border-b border-yellow-500/30 px-8 py-6 text-center">
+        <p className="text-xs font-medium uppercase tracking-[0.25em] text-yellow-400">
+          Security check
+        </p>
+        <h3 className="mt-3 text-2xl font-semibold text-white">
+          Verify your account
+        </h3>
+        <p className="mt-2 text-sm text-zinc-400">
+          Enter the 6‑digit code sent to your email address.
+        </p>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-6 px-8 py-6">
+        <div className="flex flex-col items-center gap-3">
+          <label
+            htmlFor="otp-0"
+            className="text-xs font-medium uppercase tracking-[0.20em] text-zinc-400"
+          >
+            One‑time passcode
+          </label>
+
+          <div
+            className="flex justify-center gap-2 text-black"
+            onPaste={handlePaste}
+          >
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                id={`otp-${index}`}
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength="1"
+                className={
+                  "h-12 w-12 rounded-xl border bg-black text-center text-xl font-semibold text-yellow-300 " +
+                  "border-zinc-800 shadow-sm shadow-black outline-none transition-all " +
+                  "focus:-translate-y-0.5 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-500/50 " +
+                  "disabled:cursor-not-allowed disabled:opacity-60"
+                }
+                value={digit}
+                ref={(el) => (inputRefs.current[index] = el)}
+                onChange={(e) => handleChange(e.target.value, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+              />
+            ))}
+          </div>
+
+          <p className="text-xs text-zinc-500">
+            You will be logged out automatically if the code expires.
           </p>
         </div>
-        <div className="p-6 space-y-4">
-          <form onSubmit={handleSubmit}>
-            <div className="flex items-center gap-2">
-              <div className="flex mx-auto items-center text-black">
-                {otp.map((data, index) => {
-                  return (
-                    <input
-                      key={index}
-                      type="text"
-                      name="otp"
-                      maxLength="1"
-                      className="relative flex h-10 w-10 items-center justify-center border-y border-r border-input text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md text-center"
-                      value={data}
-                      onChange={(e) => handleChange(e.target, index)}
-                      onFocus={(e) => e.target.select()}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-            <div className="flex items-center p-6">
-              <button
-                type="submit"
-                className="inline-flex mx-auto bg-yellow-50 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-[50%]"
-              >
-                Verify
-              </button>
-            </div>
-          </form>
+
+        {error && (
+          <p className="text-center text-sm font-medium text-red-400">
+            {error}
+          </p>
+        )}
+
+        {/* Actions */}
+        <div className="flex flex-col items-center gap-3 pt-2">
+          <button
+            type="submit"
+            disabled={loading || otp.join("").length !== 6}
+            className="flex w-full items-center justify-center rounded-xl bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-black shadow-lg shadow-yellow-500/40 transition hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? "Verifying..." : "Verify code"}
+          </button>
+
+          <div className="flex items-center justify-center gap-2 text-xs text-zinc-400">
+            <span>Didn&apos;t get the code?</span>
+            <button
+              type="button"
+              onClick={handleResend}
+              disabled={resendTimer > 0}
+              className="text-xs font-semibold text-yellow-400 hover:text-yellow-300 disabled:cursor-not-allowed disabled:text-zinc-600"
+            >
+              {resendTimer > 0
+                ? `Resend in 0:${resendTimer.toString().padStart(2, "0")}`
+                : "Resend code"}
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
-  );
+  </div>
+);
+
 }

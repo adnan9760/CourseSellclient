@@ -8,7 +8,6 @@ import { setToken } from "../../reducer/slices/authSlice";
 import { setUser } from "../../reducer/slices/profileSlice";
 import { setStep } from "../../reducer/slices/courseSlice";
 import { initializeUserCart } from "../../reducer/slices/cartSlice";
-
 export function sendOtp(email, navigate) {
   return async (dispatch) => {
     try {
